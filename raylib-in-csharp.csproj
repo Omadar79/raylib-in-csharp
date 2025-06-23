@@ -13,7 +13,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Assets\" />
+    <Folder Include="src\Utilities\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="resources\music\mission_plausible.ogg" />
+    <Resource Include="resources\music\mission_plausible.ogg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <None Remove="resources\music\cats_spies.wav" />
+    <Resource Include="resources\music\cats_spies.wav" >
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

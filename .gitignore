@@ -11,7 +11,7 @@
 .vscode/
 *.data
 
-/[Aa]ssets/
+#/[Rr]esources/
 /[Ll]ib/
 /[Ii]nclude/
 
