@@ -24,7 +24,7 @@ namespace my_game.state
             if (Program.InputSystem.IsShooting())
             {
                 Program.ProjectileSystem.AddProjectile(_playerPosition
-                     , Program.InputSystem.GetFireDirection(_playerPosition));
+                     , Program.InputSystem.GetAimDirection(_playerPosition));
 
             }
             Program.ProjectileSystem.UpdateProjectiles(deltaTime, Program.EnemySystem.GetActiveEnemies());
