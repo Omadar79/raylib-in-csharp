@@ -89,5 +89,13 @@ namespace my_game.input
             Vector2 direction = Vector2.Normalize(mousePosition - playerPosition);
             return direction;
         }
+        
+        public float VectorToAimAngle(Vector2 normalizedVector)
+        {
+            // Calculate angle in radians (0 = up, 90 = right, 180 = down, 270 = left)
+            float radians = MathF.Atan2(normalizedVector.X, -normalizedVector.Y);
+            float degrees = radians * (180 / MathF.PI);
+            return (degrees + 360) % 360;
+        }
     }
 }
