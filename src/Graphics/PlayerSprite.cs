@@ -5,11 +5,9 @@ namespace my_game.Graphics;
 
 public class PlayerSprite //: ISprite
 {
-    private static string _resPathTankBottom = Path.Combine(Program.ResourceRootDirectory, "resources","sprites", "ACS_Base.png");
-    private static string _resPathTankTop = Path.Combine(Program.ResourceRootDirectory, "resources","sprites", "ACS_Tower.png");
-        
-    private Texture2D _baseImageTexture = Raylib.LoadTexture(_resPathTankBottom);
-    private Texture2D _rotatingImageTexture = Raylib.LoadTexture(_resPathTankTop);
+    
+    private Texture2D _baseImageTexture; //= AssetManager.GetImage("tank_base");
+    private Texture2D _rotatingImageTexture;// = AssetManager.GetImage("tank_turrent");
     
     private Vector2 _originTurret = new Vector2(23, 23); // Origin point for turret rotation
     private int _turretRotation = 0; // Rotation of the turret in degrees
@@ -28,7 +26,10 @@ public class PlayerSprite //: ISprite
 
     public PlayerSprite()
     {
-      
+        var baseImage = AssetManager.GetImage("tank_base");
+        var turretImage = AssetManager.GetImage("tank_turret");
+        _baseImageTexture = Raylib.LoadTextureFromImage(baseImage);
+        _rotatingImageTexture = Raylib.LoadTextureFromImage(turretImage);
     }
     
 

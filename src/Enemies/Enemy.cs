@@ -3,13 +3,14 @@ using Raylib_cs;
 
 namespace my_game.enemies;
 
-public struct Enemy(Vector2 position, Vector2 velocity, Vector2 size)
+public struct Enemy(string imageKey,Vector2 position, Vector2 velocity, Vector2 size, float rotation = 0f)
 {
     public bool isActive = true;
-    public Vector2 Position = position;
-    public Vector2 Velocity = velocity;
-    public Vector2 Size = size; 
-    //public static readonly Vector2 Size = new(20, 20); // Default size
+    public string imageKey = imageKey;
+    public Vector2 position = position;
+    public Vector2 velocity = velocity;
+    public Vector2 size = size; 
+    public float rotation = rotation;
 
-    public Rectangle GetRect() => new Rectangle(Position.X, Position.Y, Size.X, Size.Y);
+    public Rectangle GetRect() => new Rectangle(position.X, position.Y, size.X, size.Y);
 }

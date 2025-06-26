@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using my_game.Graphics;
 using Raylib_cs;
 
 namespace my_game.enemies;
@@ -12,15 +13,31 @@ public class EnemySystem
     // Number of currently active projectiles
     private int _activeCount = 0;
     
+    private Texture2D _texture;
+    private bool _isLoaded = false;
+    
+    public void LoadEnemyTextures()
+    {
+        var image = AssetManager.GetImage("enemy6");
+        
+        _texture = Raylib.LoadTextureFromImage(image);
+        _isLoaded = true;
+    }
+    
     
     // Adds a new projectile to the pool if there is space
-    public void AddEnemy(Vector2 position, Vector2 velocity,Vector2 size, float speed = 150f)
+    public void AddEnemy(string imageKey,Vector2 position, Vector2 velocity,Vector2 size, float speed = 150f)
     {
+        if (!_isLoaded)
+        {
+            LoadEnemyTextures();
+        }
+        
         if (_activeCount >= MAX_ENEMIES)
         {
             return; // Pool full, skip
         }
-        _enemies[_activeCount] = new Enemy(position, velocity * speed, size);
+        _enemies[_activeCount] = new Enemy(imageKey,position, velocity * speed, size);
         _activeCount++;
     }
     
@@ -35,10 +52,10 @@ public class EnemySystem
             if (enemy.isActive)
             {
                 // Move projectile based on velocity and speed
-                enemy.Position += enemy.Velocity * deltaTime;
+                enemy.position += enemy.velocity * deltaTime;
                 // Deactivate if out of screen bounds
-                if (enemy.Position.X < 0 || enemy.Position.X > Raylib.GetScreenWidth() ||
-                    enemy.Position.Y < 0 || enemy.Position.Y > Raylib.GetScreenHeight())
+                if (enemy.position.X < 0 || enemy.position.X > Raylib.GetScreenWidth() ||
+                    enemy.position.Y < 0 || enemy.position.Y > Raylib.GetScreenHeight())
                 {
                     enemy.isActive = false;
                 }
@@ -62,12 +79,43 @@ public class EnemySystem
         for (int i = 0; i < _activeCount; i++)
         {
             ref Enemy enemy = ref _enemies[i];
-            Raylib.DrawRectangleV(enemy.Position, enemy.Size, Color.Red);
-        
+            DrawSprite(enemy.position, enemy.size, enemy.rotation);
+           
         }
+    }
+    
+    
+    private void DrawSprite( Vector2 position, Vector2 size, float rotation = 0f)
+    {
+        var scale = new Vector2(.5f, .5f);
+        var origin = new Vector2(_texture.Width / 2f, _texture.Height / 2f); // Center origin for rotation and scale
+        var newRect = new Rectangle(position.X, position.Y, _texture.Width *  scale.X, _texture.Height * scale.Y);
+        var rotate = 90f;
+        Raylib.DrawTexturePro(_texture
+            , new Rectangle(0, 0, _texture.Width, _texture.Height)
+            ,newRect
+            , origin
+            ,rotate
+            ,Color.White
+        );
+        var colliderRect = GetBaseColliderRect(position, scale);
+        Raylib.DrawRectanglePro(colliderRect,origin, rotate, Color.Red); // Draw collider rectangle for debugging
+        //Raylib.DrawRectangleLinesEx(colliderRect, 1, Color.Red); // Draw collider rectangle for debugging
     }
     
     // Returns a read-only span of all active projectiles (for collision, etc.)
     public Span<Enemy> GetActiveEnemies() => _enemies.AsSpan(0, _activeCount);
+    
+    
+    private Rectangle GetBaseColliderRect(Vector2 position, Vector2 scale)
+    {
+        // Returns a rectangle centered on the given position, matching the base image size
+        return new Rectangle(
+            position.X,
+            position.Y,
+            _texture.Width *  scale.X,
+            _texture.Height * scale.Y
+        );
+    }
 }
 
