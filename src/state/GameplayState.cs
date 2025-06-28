@@ -41,8 +41,8 @@ public class GameplayState : IGameState
         {
             var randomEnemySpawnPosition = new Vector2(_random.Next(0, screenWidth), 5);
             var enemyVelocity = new Vector2(0, 1); // Enemies move downwards
-            var enemySize = new Vector2(170, 102); // Size of the enemy
-            Program.EnemySystem.AddEnemy("enemy6",randomEnemySpawnPosition, enemyVelocity,enemySize );
+            //var enemySize = new Vector2(170, 102); // Size of the enemy
+            Program.EnemySystem.AddEnemy(randomEnemySpawnPosition, enemyVelocity , 1f);
         }
         Program.EnemySystem.UpdateEnemies(deltaTime);
     }

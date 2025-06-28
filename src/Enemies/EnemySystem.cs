@@ -16,6 +16,8 @@ public class EnemySystem
     private Texture2D _texture;
     private bool _isLoaded = false;
     
+    
+    
     public void LoadEnemyTextures()
     {
         var image = AssetManager.GetImage("enemy6");
@@ -25,19 +27,23 @@ public class EnemySystem
     }
     
     
-    // Adds a new projectile to the pool if there is space
-    public void AddEnemy(string imageKey,Vector2 position, Vector2 velocity,Vector2 size, float speed = 150f)
+
+    public void AddEnemy(Vector2 position, Vector2 velocity, float scale = 1f, float speed = 150f)
     {
         if (!_isLoaded)
         {
             LoadEnemyTextures();
         }
         
+        
+        
+        
+        
         if (_activeCount >= MAX_ENEMIES)
         {
             return; // Pool full, skip
         }
-        _enemies[_activeCount] = new Enemy(imageKey,position, velocity * speed, size);
+        _enemies[_activeCount] = new Enemy(_texture, position, velocity * speed, scale, 0f);
         _activeCount++;
     }
     
@@ -79,43 +85,33 @@ public class EnemySystem
         for (int i = 0; i < _activeCount; i++)
         {
             ref Enemy enemy = ref _enemies[i];
-            DrawSprite(enemy.position, enemy.size, enemy.rotation);
+            DrawSprite(enemy.texture, enemy.GetSourceRect,enemy.GetDestinationRect, enemy.GetOrigin,enemy.rotation);
            
         }
     }
     
     
-    private void DrawSprite( Vector2 position, Vector2 size, float rotation = 0f)
+    private void DrawSprite( Texture2D texture, Rectangle sourceRect, Rectangle destRect,Vector2  origin, float rotation)
     {
-        var scale = new Vector2(.5f, .5f);
-        var origin = new Vector2(_texture.Width / 2f, _texture.Height / 2f); // Center origin for rotation and scale
-        var newRect = new Rectangle(position.X, position.Y, _texture.Width *  scale.X, _texture.Height * scale.Y);
-        var rotate = 90f;
-        Raylib.DrawTexturePro(_texture
-            , new Rectangle(0, 0, _texture.Width, _texture.Height)
-            ,newRect
-            , origin
-            ,rotate
-            ,Color.White
-        );
-        var colliderRect = GetBaseColliderRect(position, scale);
-        Raylib.DrawRectanglePro(colliderRect,origin, rotate, Color.Red); // Draw collider rectangle for debugging
-        //Raylib.DrawRectangleLinesEx(colliderRect, 1, Color.Red); // Draw collider rectangle for debugging
+        Console.WriteLine("Drawing sprite: " + texture.Id);
+        Console.WriteLine("---Source Rect: " + sourceRect.ToString());
+        Console.WriteLine("---Dest   Rect: " + destRect.ToString());
+        Console.WriteLine("---Origin     : " + origin.ToString());
+        Console.WriteLine("---Rotation   : " + rotation);
+        //var rotate = 90f;
+        Raylib.DrawTexturePro(texture
+                , sourceRect
+                , destRect
+                , origin
+                , rotation
+                ,Color.White
+            );
+        Raylib.DrawRectangleLinesEx(destRect, 1, Color.Red); // Draw collider rectangle for debugging
     }
     
     // Returns a read-only span of all active projectiles (for collision, etc.)
     public Span<Enemy> GetActiveEnemies() => _enemies.AsSpan(0, _activeCount);
     
     
-    private Rectangle GetBaseColliderRect(Vector2 position, Vector2 scale)
-    {
-        // Returns a rectangle centered on the given position, matching the base image size
-        return new Rectangle(
-            position.X,
-            position.Y,
-            _texture.Width *  scale.X,
-            _texture.Height * scale.Y
-        );
-    }
 }
 
