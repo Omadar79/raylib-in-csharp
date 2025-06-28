@@ -36,14 +36,11 @@ public class EnemySystem
         }
         
         
-        
-        
-        
         if (_activeCount >= MAX_ENEMIES)
         {
             return; // Pool full, skip
         }
-        _enemies[_activeCount] = new Enemy(_texture, position, velocity * speed, scale, 0f);
+        _enemies[_activeCount] = new Enemy(_texture, position, velocity * speed, scale, 180f);
         _activeCount++;
     }
     
@@ -85,28 +82,28 @@ public class EnemySystem
         for (int i = 0; i < _activeCount; i++)
         {
             ref Enemy enemy = ref _enemies[i];
-            DrawSprite(enemy.texture, enemy.GetSourceRect,enemy.GetDestinationRect, enemy.GetOrigin,enemy.rotation);
-           
+            DrawEnemySprite(enemy);
+            DrawEnemyColliders(enemy);
         }
     }
     
-    
-    private void DrawSprite( Texture2D texture, Rectangle sourceRect, Rectangle destRect,Vector2  origin, float rotation)
+    private void DrawEnemySprite(Enemy enemy)
     {
-        Console.WriteLine("Drawing sprite: " + texture.Id);
-        Console.WriteLine("---Source Rect: " + sourceRect.ToString());
-        Console.WriteLine("---Dest   Rect: " + destRect.ToString());
-        Console.WriteLine("---Origin     : " + origin.ToString());
-        Console.WriteLine("---Rotation   : " + rotation);
-        //var rotate = 90f;
-        Raylib.DrawTexturePro(texture
-                , sourceRect
-                , destRect
-                , origin
-                , rotation
-                ,Color.White
-            );
-        Raylib.DrawRectangleLinesEx(destRect, 1, Color.Red); // Draw collider rectangle for debugging
+        Raylib.DrawTexturePro(enemy.texture
+            , enemy.GetSourceRect
+            , enemy.GetDestinationRect
+            , enemy.GetOrigin(enemy.GetDestinationRect)
+            , enemy.rotation
+            ,Color.White
+        );
+    }
+    private void DrawEnemyColliders(Enemy enemy)
+    {
+        var colliderRect = enemy.GetColliderRect;
+        Raylib.DrawRectangleLinesEx(colliderRect, 1, Color.Red);
+        var center = enemy.GetColliderCircleTuple().center;
+        var radius = enemy.GetColliderCircleTuple().radius;
+        Raylib.DrawCircleLinesV(center, radius, Color.Green);
     }
     
     // Returns a read-only span of all active projectiles (for collision, etc.)

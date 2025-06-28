@@ -46,7 +46,7 @@ public class ProjectileSystem
                 for (int j = 0; j < enemies.Length; j++)
                 {
                     ref Enemy enemy = ref enemies[j];
-                    if (enemy.isActive && Raylib.CheckCollisionRecs(projectile.GetRect(), enemy.GetDestinationRect))
+                    if (enemy.isActive && Raylib.CheckCollisionRecs(projectile.GetRect(), enemy.GetColliderRect))
                     {
                         projectile.isActive = false;
                         enemy.isActive = false;
