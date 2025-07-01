@@ -26,8 +26,8 @@ public class PlayerSprite //: ISprite
 
     public PlayerSprite()
     {
-        var baseImage = AssetManager.GetImage("tank_base");
-        var turretImage = AssetManager.GetImage("tank_turret");
+        var baseImage = AssetManager.Instance.GetImage("tank_base");
+        var turretImage = AssetManager.Instance.GetImage("tank_turret");
         _baseImageTexture = Raylib.LoadTextureFromImage(baseImage);
         _rotatingImageTexture = Raylib.LoadTextureFromImage(turretImage);
     }

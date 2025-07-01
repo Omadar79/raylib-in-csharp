@@ -1,5 +1,6 @@
 ﻿using System.Numerics;
 using my_game.player;
+using my_game.projectiles;
 using Raylib_cs;
 
 namespace my_game.state;
@@ -9,7 +10,22 @@ public class GameplayState : IGameState
 
     private Random _random = new Random();
     private Player _player = new Player(new Vector2(400, 240));
+
+    private GameStateManager _gameStateManager;
     
+    public void EnterState(GameStateManager gameStateManager)
+    {
+        _gameStateManager = gameStateManager;
+        _player.PlayerDeadEvent += Player_OnPlayerDeadEvent;
+    }
+
+    private void Player_OnPlayerDeadEvent()
+    {
+        Console.WriteLine("Player has died. Transitioning to Game Over state...");
+        _gameStateManager.SetState(new GameOverState());
+     
+    }
+
     public void Update()
     {
         var deltaTime = Raylib.GetFrameTime();
@@ -28,14 +44,20 @@ public class GameplayState : IGameState
         {
  
             var aimDirection = Program.InputSystem.GetAimDirection(_player.Position);
-            Program.ProjectileSystem.AddProjectile(_player.Position, aimDirection);
+            Program.ProjectileSystem.AddProjectile(_player.Position, aimDirection, 600f, 1, ProjectileSource.Player);
 
 
             _player.Rotation = Program.InputSystem.VectorToAimAngle(aimDirection);
 
         }
+        
+        ///////  PROJECTILE SYSTEM UPDATE ///////
         Program.ProjectileSystem.UpdateProjectiles(deltaTime, Program.EnemySystem.GetActiveEnemies());
      
+        ///////  COLLISION SYSTEM UPDATE ///////
+        Program.CollisionSystem.UpdateCollisions(Program.EnemySystem.GetActiveEnemies()
+            , Program.ProjectileSystem.GetActiveProjectiles(),_player);
+        
         // Spawn enemies randomly
         if (_random.Next(100) < 2)
         {
@@ -59,5 +81,10 @@ public class GameplayState : IGameState
         
         Program.EnemySystem.DrawEnemies();
     
+    }
+
+    public void ExitState()
+    {
+
     }
 }

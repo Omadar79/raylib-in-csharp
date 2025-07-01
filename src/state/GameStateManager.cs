@@ -1,24 +1,26 @@
-﻿namespace my_game.state
+﻿namespace my_game.state;
+
+public class GameStateManager
 {
-    public class GameStateManager
+
+    private IGameState _currentState;
+
+    public void SetState(IGameState newState)
     {
-        private IGameState currentState;
+        _currentState?.ExitState();
+        _currentState = newState;
+        _currentState?.EnterState( this);
+    }
 
-        public void SetState(IGameState state)
-        {
-            currentState = state;
-        }
+    public void Update()
+    {
+        _currentState?.Update();
+    }
 
-        public void Update()
-        {
-            currentState?.Update();
-        }
-
-        public void Draw()
-        {
-            currentState?.Draw();
-        }
+    public void Draw()
+    {
+        _currentState?.Draw();
     }
     
-}
 
+}

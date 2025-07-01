@@ -14,7 +14,6 @@
 
   <ItemGroup>
     <Folder Include="resources\sprites\" />
-    <Folder Include="src\Utilities\" />
   </ItemGroup>
 
   <ItemGroup>

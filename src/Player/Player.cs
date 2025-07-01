@@ -7,14 +7,18 @@ namespace my_game.player
 {
     public class Player
     {
+        public event Action PlayerDeadEvent ;
         
         public Vector2 Position { get; set; }
         public Rectangle Collider { get; }
 
         public float Rotation { get; set; }
+
+        public int Health { get; set; } = 10; // Default health value
         
         private PlayerSprite _playerSprite;
 
+        
         
         public Player(Vector2 startPosition)
         {
@@ -32,5 +36,21 @@ namespace my_game.player
             
         }
         
+        public void TakeDamage(int damage)
+        {
+            Health -= damage;
+            if (Health <= 0)
+            {
+                //IsAlive = false;
+                Console.WriteLine("Player has died.");
+                PlayerDeadEvent?.Invoke();
+            }
+        }
+        
+        
+        public Rectangle GetColliderRect()
+        {
+            return _playerSprite.GetBaseColliderRect(Position);
+        }
     }
 }

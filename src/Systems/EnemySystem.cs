@@ -12,22 +12,17 @@ public class EnemySystem
     private readonly Enemy[] _enemies = new Enemy[MAX_ENEMIES];
     // Number of currently active projectiles
     private int _activeCount = 0;
-    
     private Texture2D _texture;
     private bool _isLoaded = false;
     
-    
-    
     public void LoadEnemyTextures()
     {
-        var image = AssetManager.GetImage("enemy6");
+        var image = AssetManager.Instance.GetImage("enemy6");
         
         _texture = Raylib.LoadTextureFromImage(image);
         _isLoaded = true;
     }
     
-    
-
     public void AddEnemy(Vector2 position, Vector2 velocity, float scale = 1f, float speed = 150f)
     {
         if (!_isLoaded)
@@ -35,15 +30,13 @@ public class EnemySystem
             LoadEnemyTextures();
         }
         
-        
         if (_activeCount >= MAX_ENEMIES)
         {
             return; // Pool full, skip
         }
-        _enemies[_activeCount] = new Enemy(_texture, position, velocity * speed, scale, 180f);
+        _enemies[_activeCount] = new Enemy(_texture, position, velocity * speed, scale, 180f, 2);
         _activeCount++;
     }
-    
     
     // Updates all active projectiles: moves them and deactivates if out of bounds
     public void UpdateEnemies(float deltaTime)
@@ -52,20 +45,20 @@ public class EnemySystem
         while (i < _activeCount)
         {
             ref Enemy enemy = ref _enemies[i];
-            if (enemy.isActive)
+            if (enemy.IsActive)
             {
                 // Move projectile based on velocity and speed
-                enemy.position += enemy.velocity * deltaTime;
+                enemy.Position += enemy.Velocity * deltaTime;
                 // Deactivate if out of screen bounds
-                if (enemy.position.X < 0 || enemy.position.X > Raylib.GetScreenWidth() ||
-                    enemy.position.Y < 0 || enemy.position.Y > Raylib.GetScreenHeight())
+                if (enemy.Position.X < 0 || enemy.Position.X > Raylib.GetScreenWidth() ||
+                    enemy.Position.Y < 0 || enemy.Position.Y > Raylib.GetScreenHeight())
                 {
-                    enemy.isActive = false;
+                    enemy.IsActive = false;
                 }
                 
                 //TODO: Add collision detection logic here
             }
-            if (!enemy.isActive)
+            if (!enemy.IsActive)
             {
                 // Remove inactive projectile by swapping with the last active one and reducing count
                 _enemies[i] = _enemies[_activeCount - 1];
@@ -89,11 +82,11 @@ public class EnemySystem
     
     private void DrawEnemySprite(Enemy enemy)
     {
-        Raylib.DrawTexturePro(enemy.texture
+        Raylib.DrawTexturePro(enemy.Texture
             , enemy.GetSourceRect
             , enemy.GetDestinationRect
             , enemy.GetOrigin(enemy.GetDestinationRect)
-            , enemy.rotation
+            , enemy.Rotation
             ,Color.White
         );
     }
@@ -108,7 +101,6 @@ public class EnemySystem
     
     // Returns a read-only span of all active projectiles (for collision, etc.)
     public Span<Enemy> GetActiveEnemies() => _enemies.AsSpan(0, _activeCount);
-    
     
 }
 

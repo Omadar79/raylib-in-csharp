@@ -3,8 +3,11 @@
     
     public interface IGameState
     {
+        void EnterState(GameStateManager gameStateManager);
         void Update();
         void Draw();
+        void ExitState();
+
     }
 
 }

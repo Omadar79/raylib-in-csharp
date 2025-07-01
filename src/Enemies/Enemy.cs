@@ -3,19 +3,15 @@ using Raylib_cs;
 
 namespace my_game.enemies;
 
-public struct Enemy(Texture2D texture, Vector2 position, Vector2 velocity, float scale = 1f, float rotation = 0f)
+public struct Enemy(Texture2D texture, Vector2 position, Vector2 velocity, float scale = 1f, float rotation = 0f, int health = 2)
 {
-    public bool isActive = true;
-    public bool isVisible = true; // Default visibility
-
-    public Vector2 position = position;
-    public Vector2 velocity = velocity;
-
-
-    public Texture2D texture = texture;
-    public float rotation = rotation;
-    public float scale = scale; // Default scale of 1
-    
+    public bool IsActive { get; set; }  = true;
+    public Vector2 Position { get; set; }  = position;
+    public Vector2 Velocity { get; set; }  = velocity;
+    public Texture2D Texture { get; set; } = texture;
+    public float Rotation { get; set; } = rotation;
+    public float Scale { get; set; }  = scale; // Default scale of 1
+    public int Health { get; set; } = health; // Default health
     
     public Vector2 GetOrigin (Rectangle destinationRect)
     {
@@ -25,31 +21,29 @@ public struct Enemy(Texture2D texture, Vector2 position, Vector2 velocity, float
     public Rectangle GetSourceRect => new Rectangle(
         0,
         0,
-        texture.Width,
-        texture.Height
+        Texture.Width,
+        Texture.Height
     );
 
     public Rectangle GetDestinationRect=> new Rectangle(
-            position.X ,
-            position.Y ,
-            texture.Width * scale,
-            texture.Height * scale
+            Position.X ,
+            Position.Y ,
+            Texture.Width * Scale,
+            Texture.Height * Scale
         );
  
     public Rectangle GetColliderRect => new Rectangle(
-        position.X - (texture.Width * scale / 2f),
-        position.Y - (texture.Height * scale / 2f),
-        texture.Width * scale,
-        texture.Height * scale
+        Position.X - (Texture.Width * Scale / 2f),
+        Position.Y - (Texture.Height * Scale / 2f),
+        Texture.Width * Scale,
+        Texture.Height * Scale
     );
 
     public (Vector2 center, float radius) GetColliderCircleTuple()
     {
-        var center = new Vector2((texture.Width * scale / 2f), (texture.Height * scale / 2f));
-        var radius = MathF.Max(texture.Width, texture.Height) * scale / 2f;
+        var center = new Vector2((Texture.Width * Scale / 2f), (Texture.Height * Scale / 2f));
+        var radius = MathF.Max(Texture.Width, Texture.Height) * Scale / 2f;
         return (center, radius);
-        
     }
-    
     
 }

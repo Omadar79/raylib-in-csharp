@@ -5,6 +5,12 @@ namespace my_game.state
 {
     public class GameOverState : IGameState
     {
+        GameStateManager _gameStateManager;
+        public void EnterState(GameStateManager gameStateManager)
+        {
+            _gameStateManager = gameStateManager;
+        }
+
         public void Update()
         {
             //TODO click to restart the game or go to main menu
@@ -19,6 +25,11 @@ namespace my_game.state
             Raylib.ClearBackground(Color.DarkGray);
             Raylib.DrawText("Game Over", 10, 10, 20, Color.White);
             Raylib.DrawText("Press Escape to Restart Game", 10, 40, 20, Color.LightGray);
+        }
+
+        public void ExitState()
+        {
+            
         }
     }    
 }

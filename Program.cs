@@ -1,48 +1,47 @@
 ﻿using Raylib_cs;
-using System.IO;
 using my_game.enemies;
 using my_game.Graphics;
 using my_game.input;
-using my_game.player;
+using my_game.managers;
 using my_game.state;
+using my_game.systems;
+using my_game.utilities;
 
 
 namespace my_game;
 
 public static class Program
 {
-    // Singleton instances for various systems
+    // Singleton instances for managers (Can track state)
+    public static GameManager GameManager => GameManager.Instance;
+    public static AssetManager AssetManager => AssetManager.Instance;
+   // public static LevelManager LevelManager => LevelManager.Instance;
+    
+    // static instances for various systems (not stateful)
     public static readonly InputSystem InputSystem = new InputSystem();
     public static readonly ProjectileSystem ProjectileSystem = new ProjectileSystem();
     public static readonly EnemySystem EnemySystem = new EnemySystem();
-
-
-    public const string ResourceRootDirectory = "C:\\Users\\Dustin\\RayLibProjects\\raylib-in-csharp\\";
-
-    //--- Game Constants and Global Variables ---
-    private static readonly int _screenWidth = 1024;
-    private static readonly int _screenHeight = 768;
+    public static readonly CollisionSystem CollisionSystem = new CollisionSystem();
     
-    private static GameStateManager _stateManager = new GameStateManager();
-    
-   // private static Music _music = Raylib.LoadMusicStream(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "assets", "music", "mission_plausible.ogg"));
+    // private static Music _music = Raylib.LoadMusicStream(System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "assets", "music", "mission_plausible.ogg"));
 
     private static Music _music;
     
     [STAThread]  // needed for Windows Forms compatibility
     public static void Main()
     {
-        
         InitializeGame();
-        
-        // PRIMARY GAME LOOP
+        GameManager.StartGame();
+        // -----------------PRIMARY GAME LOOP
         while (!Raylib.WindowShouldClose())
         {
+            // Logic Update Tick
             Raylib.UpdateMusicStream(_music);
-            _stateManager.Update();
+            GameManager.UpdateTick();
            
+            // Drawing Update Tick
             Raylib.BeginDrawing();
-            _stateManager.Draw();
+            GameManager.DrawTick();
             Raylib.EndDrawing();
         }
 
@@ -53,18 +52,14 @@ public static class Program
     {
         InitializeAssets();
         
-        Raylib.InitWindow(_screenWidth, _screenHeight, "Shmup Combat");
-        Raylib.SetTargetFPS(60);
+        Raylib.InitWindow(GameManager.ScreenWidth, GameManager.ScreenHeight, "Shmup Combat");
+        Raylib.SetTargetFPS(GameManager.TargetFPS);
         
-        _stateManager.SetState(new GameplayState());
         InitializeAudio();
-
-
     }
 
     private static void InitializeAssets()
     {
-        AssetManager.SetRootPath(ResourceRootDirectory);
         AssetManager.SetDefaultImage(Path.Combine("resources", "sprites", "defaultTexture.png"));
        
         AssetManager.LoadImage("tank_base", Path.Combine("resources", "sprites", "ACS_Base.png"));
@@ -93,7 +88,7 @@ public static class Program
         Raylib.InitAudioDevice();
         
         // Load music file
-        var filePath = Path.Combine(ResourceRootDirectory, "resources","music", "mission_plausible.ogg");
+        var filePath = Path.Combine(AssetManager.GetRootPath(), "resources","music", "mission_plausible.ogg");
         _music = Raylib.LoadMusicStream(filePath);
         
         // Play music
