@@ -17,12 +17,18 @@ public class AudioManager
         _music = Raylib.LoadMusicStream(filePath);
         
         // Play music
-        Raylib.PlayMusicStream(_music);
+        //Raylib.PlayMusicStream(_music);
         Raylib.SetMusicVolume(_music, 1.0f);
-        // Load default sound effects or music if needed
-        // Example: LoadSound("default_sound.wav");
+      
     }
 
+    public void PlayMusicTrack()
+    {
+       
+        Raylib.PlayMusicStream(_music);
+        
+    }
+    
     public void UpdateAudioTick()
     {
         // Logic Update Tick

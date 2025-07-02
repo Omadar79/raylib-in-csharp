@@ -3,7 +3,7 @@
 
 namespace my_game.state
 {
-    public class MenuState : IGameState
+    public class MainMenuState : IGameState
     {
         GameStateManager _gameStateManager;
         public void EnterState(GameStateManager gameStateManager)

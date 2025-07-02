@@ -20,6 +20,7 @@ namespace my_game.scenes
         private int _state;              // Logo animation states
         private float _alpha = 1.0f;         // Useful for fading
 
+        public bool IsSceneFinished => _sceneFinished; // Property to check if the scene is finished
         
         public  void Init()
         {
@@ -40,6 +41,8 @@ namespace my_game.scenes
 
             _state = 0;              // Logo animation states
             _alpha = 1.0f;
+            
+            
         }
 
         public  void Update()
@@ -102,9 +105,9 @@ namespace my_game.scenes
             }
         }
 
-        public  void Draw()
+        public void Draw()
         {
-            
+            Raylib.ClearBackground(Color.RayWhite);
             if (_state == 0)         // Draw blinking top-left square corner
             {
                 if ((_frameCounter / 10) % 2 != 0)

@@ -17,6 +17,7 @@ public class GameplayState : IGameState
     public void EnterState(GameStateManager gameStateManager)
     {
         _gameStateManager = gameStateManager;
+        GameManager.Instance.audioManager.PlayMusicTrack();
         _player.PlayerDeadEvent += Player_OnPlayerDeadEvent;
     }
 

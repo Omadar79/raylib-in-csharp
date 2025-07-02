@@ -10,30 +10,7 @@ namespace my_game.Managers;
 
 public class GameManager
 {
-    // ---------------- Singleton instance of GameManager
-    private static GameManager _instance = null!;
-    
-    // ---------------- Managers
-    private LevelManager _levelManager; 
-    private GameStateManager _stateManager;
-    private AudioManager _audioManager;
-    
-    
-    public AssetManager assetManager;
-
-    
-    // ---------------- Game Systems
-    public readonly InputSystem InputSystem;
-    public readonly ProjectileSystem ProjectileSystem;
-    public readonly EnemySystem EnemySystem;
-    public readonly CollisionSystem CollisionSystem;
-    
-    public int ScreenWidth { get; set; } = 1024; // Default width
-    public int ScreenHeight { get; set; } = 768; // Default height
-    public int TargetFPS { get; set; } = 60; // Default FPS
-
-    private static readonly string SettingsFilePath = "game_settings.json";
-    
+    private static GameManager _instance = null!;     // ---------------- Singleton instance of GameManager
     public static GameManager Instance
     {
         get
@@ -42,8 +19,27 @@ public class GameManager
         }
         
     }
+    
+    // ---------------- Game Systems
+    public readonly InputSystem InputSystem;
+    public readonly ProjectileSystem ProjectileSystem;
+    public readonly EnemySystem EnemySystem;
+    public readonly CollisionSystem CollisionSystem;
+    
+    // ---------------- Managers
+    public AssetManager assetManager;
+    public AudioManager audioManager;
+    
+    private LevelManager _levelManager; 
+    private GameStateManager _stateManager;
+    
+    private int _screenWidth = 1024; // Default width
+    private int _screenHeight = 768; // Default height
+    private int _targetFPS = 60; // Default FPS
 
-    // Our Constructor sets up the rest of the game system managers
+    private static readonly string SettingsFilePath = "game_settings.json";
+    
+    // -------------  Our Constructor sets up the rest of the game system managers
     private GameManager()
     {
         InputSystem = new InputSystem();
@@ -52,24 +48,35 @@ public class GameManager
         CollisionSystem = new CollisionSystem();
 
         assetManager = new AssetManager(); // Singleton instance of AssetManager
+        audioManager = new AudioManager();
         _levelManager = new LevelManager();
         _stateManager = new GameStateManager();
-        _audioManager = new AudioManager();
-    }
-
-
-    private void InitializeGraphicAssets()
-    {
-        assetManager.InitializeGraphicAssets();
     }
     
-    
-    private void InitializeGameSettings()
+    /// <summary>
+    /// Get the current game to see if we need to continue running the game loop.
+    /// </summary>
+    public bool IsGameRunning()
     {
-        Raylib.InitWindow(ScreenWidth, ScreenHeight, "Shmup Combat");
-        Raylib.SetTargetFPS(TargetFPS);
+        return !Raylib.WindowShouldClose();
     }
-
+        
+    /// <summary>
+    /// Initializes Game settings, graphic assets, and audio.
+    /// This method is called to set up the game environment before starting the game.
+    /// </summary>
+    public void StartGame()
+    {
+        
+        InitializeGameSettings();
+        InitializeGraphicAssets();
+        audioManager.InitializeAudio();
+        
+        // TODO Load Game Levels, and start state
+        // Set initial game state for now
+        _stateManager.SetState(new LoadingGameState());
+        
+    }
     
     /// <summary>
     /// Updates the game state.
@@ -77,7 +84,7 @@ public class GameManager
     /// </summary>
     public void UpdateTick()
     {
-        _audioManager.UpdateAudioTick();
+        audioManager.UpdateAudioTick();
         _stateManager.UpdateStateTick();
     }
 
@@ -91,21 +98,36 @@ public class GameManager
         _stateManager.DrawStateTick();
         Raylib.EndDrawing();
     }
-    
-    public void StartGame()
+
+    /// <summary>
+    /// Unloads all game resources and closes the game window.
+    /// </summary>
+    public void UnloadGame()
     {
-        
-        InitializeGameSettings();
-        InitializeGraphicAssets();
-        _audioManager.InitializeAudio();
-        
-        // TODO Load Game Levels, and start state
-        // Set initial game state for now
-        _stateManager.SetState(new GameplayState());
-        
+        assetManager.UnloadAllImages();
+        audioManager.UnloadAudio();
+
+        Raylib.CloseWindow();
     }
     
-    public GameSettings Load()
+    /// <summary>
+    /// Initializes graphic assets for the game.
+    /// </summary>
+    private void InitializeGraphicAssets()
+    {
+        assetManager.InitializeGraphicAssets();
+    }
+    
+    /// <summary>
+    /// Initializes general, user-defined game settings.
+    /// </summary>
+    private void InitializeGameSettings()
+    {
+        Raylib.InitWindow(_screenWidth, _screenHeight, "Shmup Combat");
+        Raylib.SetTargetFPS(_targetFPS);
+    }
+    
+    private GameSettings Load()
     {
         if (File.Exists(SettingsFilePath))
         {
@@ -119,16 +141,7 @@ public class GameManager
             return defaultSettings;
         }
     }
-    
-    public void UnloadGame()
-    {
-        assetManager.UnloadAllImages();
-        _audioManager.UnloadAudio();
-
-        Raylib.CloseWindow();
-    }
-    
-    public void Save()
+    private void Save()
     {
         var jsonContent = JsonSerializer.Serialize(this, new JsonSerializerOptions { WriteIndented = true });
         File.WriteAllText(SettingsFilePath, jsonContent);
