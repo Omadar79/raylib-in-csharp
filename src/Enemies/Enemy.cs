@@ -1,7 +1,7 @@
 ﻿using System.Numerics;
 using Raylib_cs;
 
-namespace my_game.enemies;
+namespace my_game.Enemies;
 
 public struct Enemy(Texture2D texture, Vector2 position, Vector2 velocity, float scale = 1f, float rotation = 0f, int health = 2)
 {

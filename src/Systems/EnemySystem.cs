@@ -1,8 +1,8 @@
 ﻿using System.Numerics;
-using my_game.Graphics;
+using my_game.Managers;
 using Raylib_cs;
 
-namespace my_game.enemies;
+namespace my_game.Enemies;
 
 public class EnemySystem
 {
@@ -17,7 +17,7 @@ public class EnemySystem
     
     public void LoadEnemyTextures()
     {
-        var image = AssetManager.Instance.GetImage("enemy6");
+        var image = GameManager.Instance.assetManager.GetImage("enemy6");
         
         _texture = Raylib.LoadTextureFromImage(image);
         _isLoaded = true;

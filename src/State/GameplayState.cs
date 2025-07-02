@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using my_game.Managers;
 using my_game.player;
 using my_game.projectiles;
 using Raylib_cs;
@@ -33,30 +34,31 @@ public class GameplayState : IGameState
         int screenHeight = Raylib.GetScreenHeight();
 
         var playerPos = _player.Position;
-        playerPos  += Program.InputSystem.GetMovement();
+        playerPos  += GameManager.Instance.InputSystem.GetMovement();
+
         
         playerPos.X = Math.Clamp(playerPos.X, 0, screenWidth);
         playerPos.Y = Math.Clamp(playerPos.Y, 0, screenHeight);
         _player.Position = playerPos;
         
         // Shoot bullets
-        if (Program.InputSystem.IsShooting())
+        if (GameManager.Instance.InputSystem.IsShooting())
         {
  
-            var aimDirection = Program.InputSystem.GetAimDirection(_player.Position);
-            Program.ProjectileSystem.AddProjectile(_player.Position, aimDirection, 600f, 1, ProjectileSource.Player);
+            var aimDirection = GameManager.Instance.InputSystem.GetAimDirection(_player.Position);
+            GameManager.Instance.ProjectileSystem.AddProjectile(_player.Position, aimDirection, 600f, 1, ProjectileSource.Player);
 
 
-            _player.Rotation = Program.InputSystem.VectorToAimAngle(aimDirection);
+            _player.Rotation = GameManager.Instance.InputSystem.VectorToAimAngle(aimDirection);
 
         }
         
         ///////  PROJECTILE SYSTEM UPDATE ///////
-        Program.ProjectileSystem.UpdateProjectiles(deltaTime, Program.EnemySystem.GetActiveEnemies());
+        GameManager.Instance.ProjectileSystem.UpdateProjectiles(deltaTime, GameManager.Instance.EnemySystem.GetActiveEnemies());
      
         ///////  COLLISION SYSTEM UPDATE ///////
-        Program.CollisionSystem.UpdateCollisions(Program.EnemySystem.GetActiveEnemies()
-            , Program.ProjectileSystem.GetActiveProjectiles(),_player);
+        GameManager.Instance.CollisionSystem.UpdateCollisions(GameManager.Instance.EnemySystem.GetActiveEnemies()
+            , GameManager.Instance.ProjectileSystem.GetActiveProjectiles(),_player);
         
         // Spawn enemies randomly
         if (_random.Next(100) < 2)
@@ -64,9 +66,9 @@ public class GameplayState : IGameState
             var randomEnemySpawnPosition = new Vector2(_random.Next(0, screenWidth), 5);
             var enemyVelocity = new Vector2(0, 1); // Enemies move downwards
             //var enemySize = new Vector2(170, 102); // Size of the enemy
-            Program.EnemySystem.AddEnemy(randomEnemySpawnPosition, enemyVelocity , .25f);
+            GameManager.Instance.EnemySystem.AddEnemy(randomEnemySpawnPosition, enemyVelocity , .25f);
         }
-        Program.EnemySystem.UpdateEnemies(deltaTime);
+        GameManager.Instance.EnemySystem.UpdateEnemies(deltaTime);
     }
 
     public void Draw()
@@ -77,9 +79,9 @@ public class GameplayState : IGameState
         
        // Raylib.DrawCircleV(_player.Position, 10, Color.Blue);
         _player.Draw();
-        Program.ProjectileSystem.DrawProjectiles();
+        GameManager.Instance.ProjectileSystem.DrawProjectiles();
         
-        Program.EnemySystem.DrawEnemies();
+        GameManager.Instance.EnemySystem.DrawEnemies();
     
     }
 

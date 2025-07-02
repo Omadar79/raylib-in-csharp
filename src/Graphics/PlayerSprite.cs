@@ -1,4 +1,5 @@
 ﻿using System.Numerics;
+using my_game.Managers;
 using Raylib_cs;
 
 namespace my_game.Graphics;
@@ -26,8 +27,8 @@ public class PlayerSprite //: ISprite
 
     public PlayerSprite()
     {
-        var baseImage = AssetManager.Instance.GetImage("tank_base");
-        var turretImage = AssetManager.Instance.GetImage("tank_turret");
+        var baseImage = GameManager.Instance.assetManager.GetImage("tank_base");
+        var turretImage = GameManager.Instance.assetManager.GetImage("tank_turret");
         _baseImageTexture = Raylib.LoadTextureFromImage(baseImage);
         _rotatingImageTexture = Raylib.LoadTextureFromImage(turretImage);
     }

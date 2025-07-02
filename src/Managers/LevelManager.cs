@@ -1,20 +1,12 @@
 ﻿using System.Numerics;
 
-namespace my_game.managers;
+namespace my_game.Managers;
 
 public class LevelManager
 {
-    //private static LevelManager _instance = null!;
     private List<Level> _levels = new();
     private int _currentLevelIndex = 0;
-
-    //public static LevelManager Instance
-    //{
-    //    get
-    //    {
-    //        return _instance ??= new LevelManager();
-    //    }
-    //}
+    
     
     public LevelManager()
     {

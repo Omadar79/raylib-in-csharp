@@ -2,7 +2,6 @@
 
 public class GameStateManager
 {
-
     private IGameState _currentState;
 
     public void SetState(IGameState newState)
@@ -12,12 +11,12 @@ public class GameStateManager
         _currentState?.EnterState( this);
     }
 
-    public void Update()
+    public void UpdateStateTick()
     {
         _currentState?.Update();
     }
 
-    public void Draw()
+    public void DrawStateTick()
     {
         _currentState?.Draw();
     }
