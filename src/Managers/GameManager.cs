@@ -10,21 +10,21 @@ namespace my_game.Managers;
 
 public class GameManager
 {
-    private static GameManager _instance = null!;     // ---------------- Singleton instance of GameManager
+    private static GameManager _instance = null!;  // Singleton instance of GameManager
     public static GameManager Instance
     {
         get
         {
-            return _instance ??= new GameManager();
+            return _instance = new GameManager();
         }
         
     }
     
     // ---------------- Game Systems
-    public readonly InputSystem InputSystem;
-    public readonly ProjectileSystem ProjectileSystem;
-    public readonly EnemySystem EnemySystem;
-    public readonly CollisionSystem CollisionSystem;
+    public readonly InputSystem inputSystem;
+    public readonly ProjectileSystem projectileSystem;
+    public readonly EnemySystem enemySystem;
+    public readonly CollisionSystem collisionSystem;
     
     // ---------------- Managers
     public AssetManager assetManager;
@@ -33,19 +33,19 @@ public class GameManager
     private LevelManager _levelManager; 
     private GameStateManager _stateManager;
     
-    private int _screenWidth = 1024; // Default width
-    private int _screenHeight = 768; // Default height
-    private int _targetFPS = 60; // Default FPS
+    private readonly int _screenWidth = 1024;   // Default width
+    private readonly int _screenHeight = 768;   // Default height
+    private readonly int _targetFPS = 60;       // Default FPS
 
     private static readonly string SettingsFilePath = "game_settings.json";
     
     // -------------  Our Constructor sets up the rest of the game system managers
     private GameManager()
     {
-        InputSystem = new InputSystem();
-        ProjectileSystem = new ProjectileSystem();
-        EnemySystem = new EnemySystem();
-        CollisionSystem = new CollisionSystem();
+        inputSystem = new InputSystem();
+        projectileSystem = new ProjectileSystem();
+        enemySystem = new EnemySystem();
+        collisionSystem = new CollisionSystem();
 
         assetManager = new AssetManager(); // Singleton instance of AssetManager
         audioManager = new AudioManager();

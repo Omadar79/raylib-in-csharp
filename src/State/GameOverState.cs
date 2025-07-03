@@ -5,7 +5,7 @@ namespace my_game.state
 {
     public class GameOverState : IGameState
     {
-        GameStateManager _gameStateManager;
+        private GameStateManager? _gameStateManager;
         public void EnterState(GameStateManager gameStateManager)
         {
             _gameStateManager = gameStateManager;
@@ -17,6 +17,7 @@ namespace my_game.state
             if (Raylib.IsKeyPressed(KeyboardKey.Escape))
             {
                 // Resume the game
+                _gameStateManager?.SetState(new GameplayState());;
             }
         }
 

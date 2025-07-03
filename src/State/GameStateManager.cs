@@ -2,7 +2,7 @@
 
 public class GameStateManager
 {
-    private IGameState _currentState;
+    private IGameState _currentState = null!;
 
     public void SetState(IGameState newState)
     {

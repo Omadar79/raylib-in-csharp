@@ -45,20 +45,7 @@ public class ProjectileSystem
                 {
                     projectile.IsActive = false;
                 }
-                // Collision detection with enemies
-              //  for (int j = 0; j < enemies.Length; j++)
-              //  {
-              //      ref Enemy enemy = ref enemies[j];
-              //      
-              //      if (enemy.IsActive && Raylib.CheckCollisionRecs(projectile.GetColliderRect(), enemy.GetColliderRect))
-              //      {
-              //          // Create Collision Event to handle in another system
-              //          projectile.IsActive = false;
-              //          enemy.IsActive = false;
-              //          break; // Stop checking other enemies for this projectile
-              //      }
-              //  }
-
+            
             }
             if (!projectile.IsActive)
             {

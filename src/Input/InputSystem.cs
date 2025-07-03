@@ -3,28 +3,8 @@ using Raylib_cs;
 
 namespace my_game.input
 {
-    // Define interfaces for specific input types
-    public interface IMovementInput
-    {
-        Vector2 GetMovement();
-    }
-    
-    public interface IAimDirectionInput
-    {
-        Vector2 GetAimDirection(Vector2 playerPosition);
-    }
-
-
-    public interface IShootingInput
-    {
-        bool IsShooting();
-    }
-
-    // Implement the InputSystem class
     public class InputSystem : IMovementInput, IShootingInput, IAimDirectionInput
     {
-        
-        
         private const float leftStickDeadzone = 0.1f;
         private const float rightStickDeadzone = 0.1f;
         private const float leftTriggerDeadzone = -0.9f;

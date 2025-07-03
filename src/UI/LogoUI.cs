@@ -1,7 +1,7 @@
 ﻿using Raylib_cs;
-namespace my_game.scenes
+namespace my_game.UI
 {
-    public class SceneLogo 
+    public class LogoUI : IUserInterface
     {
         private int _frameCounter;
         private bool _sceneFinished;    // Flag to indicate if the scene is finished
@@ -22,7 +22,7 @@ namespace my_game.scenes
 
         public bool IsSceneFinished => _sceneFinished; // Property to check if the scene is finished
         
-        public  void Init()
+        public  void InitUI()
         {
             _frameCounter = 0;
             _sceneFinished = false;
@@ -45,7 +45,7 @@ namespace my_game.scenes
             
         }
 
-        public  void Update()
+        public  void UpdateUI()
         {
             if (_state == 0)                 // State 0: Top-left square corner blink logic
             {
@@ -105,7 +105,7 @@ namespace my_game.scenes
             }
         }
 
-        public void Draw()
+        public void DrawUI()
         {
             Raylib.ClearBackground(Color.RayWhite);
             if (_state == 0)         // Draw blinking top-left square corner

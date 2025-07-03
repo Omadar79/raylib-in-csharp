@@ -13,7 +13,7 @@ public class ExplosiveProjectile(Vector2 position, Vector2 velocity, int damage,
     
     public Rectangle GetColliderRect()
     {
-        return new Rectangle(position.X, position.Y, 10, 10);
+        return new Rectangle(Position.X, Position.Y, 10, 10);
     }
 
     public ProjectileSource ProjectileSource { get; set; }
@@ -21,8 +21,8 @@ public class ExplosiveProjectile(Vector2 position, Vector2 velocity, int damage,
 
     private void Explode()
     {
-        Raylib.DrawCircleV(position, _explosionRadius, Color.Red);
-        Console.WriteLine($"Explosion at {position} with radius {_explosionRadius}");
+        Raylib.DrawCircleV(Position, _explosionRadius, Color.Red);
+        Console.WriteLine($"Explosion at {Position} with radius {_explosionRadius}");
     }
 
  
