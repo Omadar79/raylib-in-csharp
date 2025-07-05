@@ -6,12 +6,12 @@ namespace my_game.state
 {
     public class MainMenuState : IGameState
     {
-        private GameStateManager? _gameStateManager;
+        private StateManager? _gameStateManager;
         private MainMenuUI? _menuUI;
         
-        public void EnterState(GameStateManager gameStateManager)
+        public void EnterState(StateManager stateManager)
         {
-            _gameStateManager = gameStateManager;
+            _gameStateManager = stateManager;
             _menuUI = new MainMenuUI();
             _menuUI.InitUI();
             _menuUI.MenuOptionSelected += MainMenuUI_OnMenuOptionSelected;

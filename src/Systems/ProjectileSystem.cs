@@ -7,14 +7,14 @@ namespace my_game.systems;
 
 public class ProjectileSystem
 {
-    // Maximum number of projectiles allowed at once
-    private const int MAX_PROJECTILES = 1024; // Tune as needed
-    // Pre-allocated array for projectile pooling
-    private readonly Projectile[] _projectiles = new Projectile[MAX_PROJECTILES];
-    // Number of currently active projectiles
-    private int _activeCount = 0;
+    private const int MAX_PROJECTILES = 1024; // Maximum number of projectiles allowed at once
+    private readonly Projectile[] _projectiles = new Projectile[MAX_PROJECTILES];  // Pre-allocated array for projectile pooling
+    private int _activeCount = 0; // Number of currently active projectiles
 
-    // Adds a new projectile to the pool if there is space
+
+    /// <summary>
+    /// Adds a new projectile to the pool if there is space
+    /// </summary>
     public void AddProjectile(Vector2 position, Vector2 velocity, float speed = 600f, int damage = 1, ProjectileSource projectileSource = ProjectileSource.All)
     {
         if (_activeCount >= MAX_PROJECTILES)
@@ -27,8 +27,10 @@ public class ProjectileSystem
         _activeCount++;
     }
 
-    // Updates all active projectiles: moves them and deactivates if out of bounds
-    // also checks for collisions with enemies
+
+    /// <summary>
+    /// Updates all active projectiles: moves them and deactivates if out of bounds
+    /// </summary>
     public void UpdateProjectiles(float deltaTime, Span<Enemy> enemies)
     {
         int i = 0;
@@ -58,7 +60,9 @@ public class ProjectileSystem
         }
     }
 
-    // Draws all active projectiles
+    /// <summary>
+    /// Draws all active projectiles 
+    /// </summary>
     public void DrawProjectiles()
     {
         for (int i = 0; i < _activeCount; i++)
@@ -67,7 +71,8 @@ public class ProjectileSystem
             Raylib.DrawCircleV(projectile.Position, 5, Color.Yellow);
         }
     }
-    
-    // Returns a read-only span of all active projectiles (for collision, etc.)
+    /// <summary>
+    /// Returns a read-only span of all active projectiles (for collision, etc.)
+    /// </summary>
     public Span<Projectile> GetActiveProjectiles() => _projectiles.AsSpan(0, _activeCount);
 }

@@ -9,9 +9,8 @@ public class AssetManager
     private string _assetRootPath = string.Empty; // Default to an empty string
     private Dictionary<string, Image> _images = new();
     private Image _defaultImage;
-  
     
-    private void SetDefaultImage(string filePath, bool filePathIsAbsolute = false)
+    public void SetDefaultImage(string filePath, bool filePathIsAbsolute = false)
     {
         string fullPath = filePath;
         string rootPath;
@@ -32,7 +31,6 @@ public class AssetManager
         }
         Console.WriteLine($"Path to default texture: {fullPath}");
         _defaultImage = Raylib.LoadImage(fullPath);
-
     }
     
     public void SetRootPath(string assetRootPath)
@@ -45,14 +43,13 @@ public class AssetManager
         _assetRootPath = string.Empty; // Reset to default empty string
     }
     
-    
     public void InitializeGraphicAssets()
     {
         SetDefaultImage(Path.Combine("resources", "sprites", "defaultTexture.png"));
        
-        LoadImage("tank_base", Path.Combine("resources", "sprites", "ACS_Base.png"));
-        LoadImage("tank_turret", Path.Combine("resources", "sprites", "ACS_Tower.png"));
-        LoadImage("enemy6", Path.Combine("resources", "sprites", "enemy6.png"));
+        LoadImageToDB("tank_base", Path.Combine("resources", "sprites", "ACS_Base.png"));
+        LoadImageToDB("tank_turret", Path.Combine("resources", "sprites", "ACS_Tower.png"));
+        LoadImageToDB("enemy6", Path.Combine("resources", "sprites", "enemy6.png"));
     }
     
     public string GetRootPath()
@@ -67,7 +64,7 @@ public class AssetManager
         }
     }
     // Load a texture into memory
-    public void LoadImage(string key, string filePath, bool filePathIsAbsolute = false)
+    public void LoadImageToDB(string key, string filePath, bool filePathIsAbsolute = false)
     {
         string fullPath = filePath;
         string rootPath;
@@ -105,8 +102,7 @@ public class AssetManager
         }
         return _images.GetValueOrDefault(key, _defaultImage);
     }
-
-
+    
     // Unload all images
     public void UnloadAllImages()
     {

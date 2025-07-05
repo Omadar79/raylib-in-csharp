@@ -7,7 +7,7 @@ namespace my_game.systems;
 
 public class CollisionSystem
 {
-    public void UpdateCollisions( Span<Enemy> enemies, Span<Projectile> projectiles, Player player)
+    public void UpdateCollisions( Span<Enemy> enemies, Span<Projectile> projectiles, PlayerMain player)
     {
         //Loop through all projectiles
         for (int i= 0; i < projectiles.Length; i++)

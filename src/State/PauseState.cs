@@ -5,10 +5,10 @@ namespace my_game.state
 {
     public class PauseState : IGameState
     {
-        GameStateManager _gameStateManager;
-        public void EnterState(GameStateManager gameStateManager)
+        private StateManager? _stateManager;
+        public void EnterState(StateManager stateManager)
         {
-            _gameStateManager = gameStateManager;
+            _stateManager = stateManager;
         }
 
         public void Update()

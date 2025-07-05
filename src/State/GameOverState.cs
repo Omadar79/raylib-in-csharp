@@ -5,10 +5,10 @@ namespace my_game.state
 {
     public class GameOverState : IGameState
     {
-        private GameStateManager? _gameStateManager;
-        public void EnterState(GameStateManager gameStateManager)
+        private StateManager? _gameStateManager;
+        public void EnterState(StateManager stateManager)
         {
-            _gameStateManager = gameStateManager;
+            _gameStateManager = stateManager;
         }
 
         public void Update()

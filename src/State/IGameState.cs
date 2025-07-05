@@ -3,7 +3,7 @@
     
     public interface IGameState
     {
-        void EnterState(GameStateManager gameStateManager);
+        void EnterState(StateManager stateManager);
         void Update();
         void Draw();
         void ExitState();

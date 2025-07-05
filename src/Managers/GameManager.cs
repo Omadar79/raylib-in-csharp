@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json;
 using my_game.Enemies;
 using my_game.input;
 using my_game.state;
@@ -8,51 +9,59 @@ using Raylib_cs;
 
 namespace my_game.Managers;
 
+[SuppressMessage("ReSharper", "ConvertConstructorToMemberInitializers")]
 public class GameManager
 {
-    private static GameManager _instance = null!;  // Singleton instance of GameManager
-    public static GameManager Instance
+    private static GameManager? _instance; // Singleton instance of GameManager
+
+    public  static GameManager Instance
     {
         get
         {
-            return _instance = new GameManager();
+            if (_instance == null)
+            {
+                _instance = new GameManager();
+            }
+
+            return _instance;
         }
-        
     }
-    
+
     // ---------------- Game Systems
     public readonly InputSystem inputSystem;
     public readonly ProjectileSystem projectileSystem;
     public readonly EnemySystem enemySystem;
     public readonly CollisionSystem collisionSystem;
-    
+
     // ---------------- Managers
-    public AssetManager assetManager;
-    public AudioManager audioManager;
-    
-    private LevelManager _levelManager; 
-    private GameStateManager _stateManager;
-    
-    private readonly int _screenWidth = 1024;   // Default width
-    private readonly int _screenHeight = 768;   // Default height
-    private readonly int _targetFPS = 60;       // Default FPS
+    public AssetManager assetManager;// = new AssetManager();
+    public AudioManager audioManager;//  = new AudioManager();
+
+    private LevelManager _levelManager;
+    private StateManager _stateManager;
+
+    private readonly int _screenWidth = 1024; // Default width
+    private readonly int _screenHeight = 768; // Default height
+    private readonly int _targetFPS = 60; // Default FPS
 
     private static readonly string SettingsFilePath = "game_settings.json";
-    
+
     // -------------  Our Constructor sets up the rest of the game system managers
-    private GameManager()
+    public GameManager()
     {
+
+        assetManager = new AssetManager();
+        audioManager  = new AudioManager();
+
+        _levelManager = new LevelManager();
+        _stateManager = new StateManager();
+        
         inputSystem = new InputSystem();
         projectileSystem = new ProjectileSystem();
         enemySystem = new EnemySystem();
         collisionSystem = new CollisionSystem();
-
-        assetManager = new AssetManager(); // Singleton instance of AssetManager
-        audioManager = new AudioManager();
-        _levelManager = new LevelManager();
-        _stateManager = new GameStateManager();
     }
-    
+
     /// <summary>
     /// Get the current game to see if we need to continue running the game loop.
     /// </summary>
@@ -67,14 +76,14 @@ public class GameManager
     /// </summary>
     public void StartGame()
     {
-        
         InitializeGameSettings();
-        InitializeGraphicAssets();
+        assetManager.InitializeGraphicAssets();
+
         audioManager.InitializeAudio();
         
         // TODO Load Game Levels, and start state
         // Set initial game state for now
-        _stateManager.SetState(new LoadingGameState());
+        _stateManager.SetState(new GameplayState());
         
     }
     
@@ -94,6 +103,7 @@ public class GameManager
     /// </summary>
     public void DrawTick()
     {
+        
         Raylib.BeginDrawing();
         _stateManager.DrawStateTick();
         Raylib.EndDrawing();
@@ -106,16 +116,7 @@ public class GameManager
     {
         assetManager.UnloadAllImages();
         audioManager.UnloadAudio();
-
         Raylib.CloseWindow();
-    }
-    
-    /// <summary>
-    /// Initializes graphic assets for the game.
-    /// </summary>
-    private void InitializeGraphicAssets()
-    {
-        assetManager.InitializeGraphicAssets();
     }
     
     /// <summary>

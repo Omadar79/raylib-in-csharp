@@ -1,23 +1,23 @@
 ﻿using System.Numerics;
 using my_game.Managers;
-using my_game.player;
 using my_game.projectiles;
 using my_game.UI;
 using Raylib_cs;
+using my_game.player;
 
 namespace my_game.state;
 
 public class GameplayState : IGameState
 {
-    private GameStateManager? _gameStateManager;
-    private GameplayUI? _gameplayUI;
+    private StateManager _gameStateManager;
+    private GameplayUI _gameplayUI;
     private Random? _random = new Random();
-    private Player _player = new Player(new Vector2(400, 240));
+    private PlayerMain _player = new PlayerMain(new Vector2(400, 240));
 
     
-    public void EnterState(GameStateManager gameStateManager)
+    public void EnterState(StateManager stateManager)
     {
-        _gameStateManager = gameStateManager;
+        _gameStateManager = stateManager;
         _gameplayUI = new GameplayUI();
         _gameplayUI.InitUI();
         

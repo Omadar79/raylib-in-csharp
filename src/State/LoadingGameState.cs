@@ -4,17 +4,19 @@ namespace my_game.state;
 
 public class LoadingGameState : IGameState
 {
-    private GameStateManager? _gameStateManager;
+    private StateManager? _gameStateManager;
     private LogoUI? _logoUI;
-    public void EnterState(GameStateManager gameStateManager)
+    public void EnterState(StateManager stateManager)
     {
-        _gameStateManager = gameStateManager;
+   
+        _gameStateManager = stateManager;
         _logoUI = new LogoUI();
         _logoUI.InitUI();
     }
 
     public void Update()
     {
+
         if (!_logoUI.IsSceneFinished)
         {
             _logoUI.UpdateUI();
@@ -27,7 +29,7 @@ public class LoadingGameState : IGameState
 
     public void Draw()
     {
-    
+
         if (!_logoUI.IsSceneFinished)
         {
             _logoUI.DrawUI();

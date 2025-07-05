@@ -15,7 +15,12 @@ public class EnemySystem
     private Texture2D _texture;
     private bool _isLoaded = false;
     
-    public void LoadEnemyTextures()
+    public EnemySystem()
+    {
+        Console.WriteLine("Enemy System Initialized");// Load enemy textures on initialization
+      
+    }
+    private void LoadEnemyTextures()
     {
         var image = GameManager.Instance.assetManager.GetImage("enemy6");
         
@@ -27,6 +32,7 @@ public class EnemySystem
     {
         if (!_isLoaded)
         {
+            Console.WriteLine("Loading enemy textures");
             LoadEnemyTextures();
         }
         
@@ -34,6 +40,7 @@ public class EnemySystem
         {
             return; // Pool full, skip
         }
+        Console.WriteLine("Add new enemy");
         _enemies[_activeCount] = new Enemy(_texture, position, velocity * speed, scale, 180f, 2);
         _activeCount++;
     }

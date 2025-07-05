@@ -7,9 +7,11 @@ public static class Program
     // Singleton instances for Game Manager that handles all Game Logic, State Management, and Systems
     private static GameManager GameManager => GameManager.Instance;
     
+    
     [STAThread]  // needed for Windows Forms compatibility
     public static void Main()
     {
+        
         GameManager.StartGame();  // Initialize game state and managers
         
         // -----------------PRIMARY GAME LOOP
