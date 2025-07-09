@@ -5,10 +5,9 @@ namespace my_game.input
 {
     public class InputSystem : IMovementInput, IShootingInput, IAimDirectionInput
     {
-        private const float leftStickDeadzone = 0.1f;
-        private const float rightStickDeadzone = 0.1f;
-        private const float leftTriggerDeadzone = -0.9f;
-        private const float rightTriggerDeadzone = -0.9f;
+        private const float LEFT_STICK_DEADZONE = 0.1f;
+        private const float RIGHT_STICK_DEADZONE = 0.1f;
+       
         
         public Vector2 GetMovement()
         {
@@ -18,20 +17,35 @@ namespace my_game.input
                 float leftStickX = Raylib.GetGamepadAxisMovement(0, GamepadAxis.LeftX);
                 float leftStickY = Raylib.GetGamepadAxisMovement(0, GamepadAxis.LeftY);
                 Vector2 move = new(leftStickX, leftStickY);
-                if (move.LengthSquared() > leftStickDeadzone) // Deadzone
+                if (move.LengthSquared() > LEFT_STICK_DEADZONE) // Deadzone
                 {
                     return Vector2.Normalize(move) * 5f;
                 }
             }
             // Fallback to WASD
             Vector2 movement = Vector2.Zero;
-            if (Raylib.IsKeyDown(KeyboardKey.A)) movement.X -= 5;
-            if (Raylib.IsKeyDown(KeyboardKey.D)) movement.X += 5;
-            if (Raylib.IsKeyDown(KeyboardKey.W)) movement.Y -= 5;
-            if (Raylib.IsKeyDown(KeyboardKey.S)) movement.Y += 5;
+            if (Raylib.IsKeyDown(KeyboardKey.A))
+            {
+                movement.X -= 5;
+            }
+            
+            if (Raylib.IsKeyDown(KeyboardKey.D))
+            {
+                movement.X += 5;
+            }
+
+            if (Raylib.IsKeyDown(KeyboardKey.W))
+            {
+                movement.Y -= 5;
+            }
+
+            if (Raylib.IsKeyDown(KeyboardKey.S))
+            {
+                movement.Y += 5;
+            }
+            
             return movement;
         }
-        
         
         public bool IsShooting()
         {
@@ -47,7 +61,7 @@ namespace my_game.input
                 float rightStickX = Raylib.GetGamepadAxisMovement(0, GamepadAxis.RightX);
                 float rightStickY = Raylib.GetGamepadAxisMovement(0, GamepadAxis.RightY);
                 Vector2 aim = new(rightStickX, rightStickY);
-                if (aim.LengthSquared() > rightStickDeadzone) // Deadzone
+                if (aim.LengthSquared() > RIGHT_STICK_DEADZONE) // DeadzoneMonica Paige 
                 {
                     return Vector2.Normalize(aim);   
                 }
@@ -55,10 +69,27 @@ namespace my_game.input
             
             //  Arrow keys ---------------------------------------------
             Vector2 arrowAim = Vector2.Zero;
-            if (Raylib.IsKeyDown(KeyboardKey.Right)) arrowAim.X += 1;
-            if (Raylib.IsKeyDown(KeyboardKey.Left)) arrowAim.X -= 1;
-            if (Raylib.IsKeyDown(KeyboardKey.Up)) arrowAim.Y -= 1;
-            if (Raylib.IsKeyDown(KeyboardKey.Down)) arrowAim.Y += 1;
+            if (Raylib.IsKeyDown(KeyboardKey.Right))
+            {
+                arrowAim.X += 1;
+            }
+
+            if (Raylib.IsKeyDown(KeyboardKey.Left))
+            {
+                arrowAim.X -= 1;
+            }
+
+            if (Raylib.IsKeyDown(KeyboardKey.Up))
+            {
+                arrowAim.Y -= 1;
+            }
+
+            if (Raylib.IsKeyDown(KeyboardKey.Down))
+            {
+                arrowAim.Y += 1;
+            }
+            
+            
             if (arrowAim.LengthSquared() > 0)
             {
                 return Vector2.Normalize(arrowAim);

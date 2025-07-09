@@ -40,11 +40,12 @@ public class GameplayState : IGameState
         
         var playerPos = _player.Position;
         playerPos  += GameManager.Instance.inputSystem.GetMovement();
-
+    
         
         playerPos.X = Math.Clamp(playerPos.X, 0, screenWidth);
         playerPos.Y = Math.Clamp(playerPos.Y, 0, screenHeight);
         _player.Position = playerPos;
+        
         
         // Shoot bullets
         if (GameManager.Instance.inputSystem.IsShooting())
@@ -75,6 +76,7 @@ public class GameplayState : IGameState
         }
         GameManager.Instance.enemySystem.UpdateEnemies(deltaTime);
         
+        _player.Update(deltaTime);
         _gameplayUI?.UpdateUI();
     }
 

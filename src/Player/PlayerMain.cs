@@ -27,10 +27,15 @@ public class PlayerMain
     }
 
     
+    public void Update(float deltaTime)
+    {
+        _playerSprite.UpdateAnimation(deltaTime);
+    }
+    
     public void Draw()
     {
         var colliderRect = _playerSprite.GetBaseColliderRect(Position);
-        Raylib.DrawRectangleLinesEx(colliderRect, 1, Color.Red); // Draw collider rectangle for debugging
+        Raylib.DrawRectangleLinesEx(colliderRect, 3, Color.Red); // Draw collider rectangle for debugging
         _playerSprite.Draw(Position, Rotation); // Assuming no rotation for now
         
     }

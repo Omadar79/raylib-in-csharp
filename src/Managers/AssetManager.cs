@@ -50,6 +50,7 @@ public class AssetManager
         LoadImageToDB("tank_base", Path.Combine("resources", "sprites", "ACS_Base.png"));
         LoadImageToDB("tank_turret", Path.Combine("resources", "sprites", "ACS_Tower.png"));
         LoadImageToDB("enemy6", Path.Combine("resources", "sprites", "enemy6.png"));
+        LoadImageToDB("player_walk_s", Path.Combine("resources", "sprites", "player_walk_south.png"));
     }
     
     public string GetRootPath()

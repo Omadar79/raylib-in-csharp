@@ -49,7 +49,6 @@ public class GameManager
     // -------------  Our Constructor sets up the rest of the game system managers
     public GameManager()
     {
-
         assetManager = new AssetManager();
         audioManager  = new AudioManager();
 
@@ -103,7 +102,6 @@ public class GameManager
     /// </summary>
     public void DrawTick()
     {
-        
         Raylib.BeginDrawing();
         _stateManager.DrawStateTick();
         Raylib.EndDrawing();
