@@ -1,6 +1,3 @@
-﻿## Raylib with C# Project
-I love Raylib but when I use the c version I always get bogged down in creating features that I can faster in C#, 
-I thought I could test the C# language wrapper for RayLib and make some sort of bullet-hell shooter. 
 
 ## Features
 - **Twin Stick controls**: Simple to implement, difficult to fine-tune.
